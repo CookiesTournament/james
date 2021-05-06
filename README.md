@@ -1,5 +1,5 @@
-# database
-Docker-Compose database
+# James
+MongoDB Docker Compose
 
 ## Start MongoDB
 ```bash
