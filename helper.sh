@@ -2,7 +2,7 @@
 
 printUsage() {
     echo "[Docker-Compose helper script]"
-    echo "Available commands: bg, start, stop, dump, console, init"
+    echo "Available commands: bg, start, stop, dump, script [sql file], console, init"
 }
 
 if [ $# -gt 0 ]
