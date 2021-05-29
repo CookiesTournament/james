@@ -1,0 +1,6 @@
+CREATE DATABASE IF NOT EXISTS tournament;
+USE tournament;
+
+CREATE TABLE IF NOT EXISTS users(
+    name VARCHAR(255)
+)
