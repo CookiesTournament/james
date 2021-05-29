@@ -2,7 +2,7 @@
 
 printUsage() {
     echo "[Docker-Compose helper script]"
-    echo "Available commands: bg, start, stop, dump, script [sql file], console, init"
+    echo "Available commands: bg, start, stop, restart, dump, script [sql file], console, init"
 }
 
 if [ $# -gt 0 ]
@@ -11,6 +11,7 @@ if [ $# -gt 0 ]
             bg) docker-compose up -d ;;
             start) docker-compose up ;;
             stop) docker-compose down ;;
+            restart) docker-compose down && docker-compose up -d ;;
             dump) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysqldump tournament -uroot -p"root"' > ./dump.sql ;;
             init) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysql -uroot -p"root" < /root/scripts/init.sql' ;;
             script)

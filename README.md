@@ -13,6 +13,7 @@ The helper script contains the following commands:
 - `./helper start` - Starts Docker compose in foreground (`docker-compose up`)
 - `./helper bg` - Starts Docker compose in background (`docker-compose up -d`)
 - `./helper stop` - Stops Docker compose (`docker-compose down`)
+- `./helper restart` - Restarts both services
 - `./helper dump` - Creates a MySQL dump of the `tournament` database and saves it as `dump.sql`.
 - `./helper script [file]` - Executes an SQL script from the `scripts` folder in the database console.
 - `./helper console` - Brings up the MariaDB console.
