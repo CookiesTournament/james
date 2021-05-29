@@ -1,0 +1,30 @@
+#!/bin/sh
+
+printUsage() {
+    echo "[Docker-Compose helper script]"
+    echo "Available commands: bg, start, stop, dump, console, init"
+}
+
+if [ $# -gt 0 ]
+    then
+        case $1 in
+            bg) docker-compose up -d ;;
+            start) docker-compose up ;;
+            stop) docker-compose down ;;
+            dump) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysqldump tournament -uroot -p"root"' > ./dump.sql ;;
+            init) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysql -uroot -p"root" < /root/scripts/init.sql' ;;
+            script)
+                if [ $# -gt 1 ]
+                    then
+                        if [ -f ./scripts/$2 ]
+                            then
+                                docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysql -uroot -p"root" < /root/scripts/'$2
+                            else echo "File not found in scripts folder!"
+                        fi
+                    else echo "Please provide a filename from the scripts folder!"
+                fi ;;
+            console) docker exec -it ${PWD##*/}_mariadb_1 sh -c 'mysql -uroot -p"root"' ;;
+            *) printUsage
+        esac
+    else printUsage
+fi
