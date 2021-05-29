@@ -2,12 +2,20 @@ version: '3.1'
 
 services:
 
-  mongo:
-    image: mongo
+  mariadb:
+    image: mariadb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
     ports:
-      - 27017:27017
+      - 3306:3306
     volumes:
-      - "./db:/data/db"
+      - "./db:/var/lib/mysql"
+  
+  pma:
+    image: phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      PMA_PORT: 3306
+      PMA_HOST: mariadb
+    ports:
+      - 8080:80
