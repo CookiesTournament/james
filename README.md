@@ -37,7 +37,7 @@ docker-compose down
 ## Setup
 When started, a new folder called `db` is created in the directory, where the data can be persisted.
 
-The MariaDB database is running on **port 3307**. Default username and password are `root`. Access PHPMyAdmin via [localhost:8080](http://localhost:8080).
+The MariaDB database is running on **port 3307**. Default username and password are `root`. Access PHPMyAdmin via [localhost:8000](http://localhost:8000).
 
 It is recommended to import the `init.sql` script into the database when you first set up the database. You can do
 this by running `./helper init`. If you don't want to or can't use the helper script use your local machine's
