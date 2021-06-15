@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 printUsage() {
     echo "[Docker-Compose helper script]"
@@ -8,23 +8,59 @@ printUsage() {
 if [ $# -gt 0 ]
     then
         case $1 in
-            bg) docker-compose up -d ;;
+            bg) docker-compose up -d 
+                echo "Docker containers started!" ;;
             start) docker-compose up ;;
-            stop) docker-compose down ;;
-            restart) docker-compose down && docker-compose up -d ;;
-            dump) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysqldump tournament -uroot -p"root"' > ./dump.sql ;;
-            init) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysql -uroot -p"root" < /root/scripts/init.sql' ;;
+            stop) docker-compose down 
+                echo "Docker containers stopped!" ;;
+            restart) docker-compose down && docker-compose up -d 
+                echo "Docker containers restarted in background!" ;;
+            dump) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysqldump tournament -uroot -p"root"' > ./dump.sql 
+                if [ $? == 0 ]
+                    then
+                        echo "SQL-Dump was saved to ${PWD}/dump.sql"
+                    else
+                        echo "An error ocurred while connecting to the container. Is it started?"
+                        exit 1 
+                fi
+                ;;
+            init) docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysql -uroot -p"root" < /root/scripts/init.sql'
+                if [ $? == 0 ]
+                    then
+                        echo "Initializing file was successfully loaded into the database!"
+                    else
+                        echo "An error occured! Is the container running and does the file scripts/inits.sql exist?"
+                        exit 1
+                fi
+                ;;
             script)
                 if [ $# -gt 1 ]
                     then
                         if [ -f ./scripts/$2 ]
                             then
                                 docker exec ${PWD##*/}_mariadb_1 sh -c 'exec mysql -uroot -p"root" < /root/scripts/'$2
+                                if [ $? == 0 ]
+                                    then
+                                        echo "Script was successfully executed... i guess"
+                                    else
+                                        echo "An error ocurred while connecting to the container. Is it started?"
+                                        exit 1 
+                                fi
                             else echo "File not found in scripts folder!"
+                            exit 1
                         fi
                     else echo "Please provide a filename from the scripts folder!"
+                    exit 1
                 fi ;;
-            console) docker exec -it ${PWD##*/}_mariadb_1 sh -c 'mysql -uroot -p"root"' ;;
+            console) docker exec -it ${PWD##*/}_mariadb_1 sh -c 'mysql -uroot -p"root"'
+                    if [ $? == 0 ]
+                        then
+                            echo "Successfully connected to database console!"
+                        else
+                            echo "An error ocurred while connecting to the container. Is it started?"
+                            exit 1 
+                    fi
+                    ;;
             *) printUsage
         esac
     else printUsage
